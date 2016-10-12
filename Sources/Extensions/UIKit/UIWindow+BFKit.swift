@@ -40,16 +40,16 @@ private var sendEventExchanged: Bool = false
 /**
  Show touch on screen
  */
-public func BFShowTouchOnScreen() {
-    UIApplication.shared.keyWindow!.activateTouch()
-}
+//public func BFShowTouchOnScreen() {
+//    UIApplication.shared.keyWindow!.activateTouch()
+//}
 
 /**
  Hide touch on screen
  */
-public func BFHideTouchOnScreen() {
-    UIApplication.shared.keyWindow!.deactivateTouch()
-}
+//public func BFHideTouchOnScreen() {
+//    UIApplication.shared.keyWindow!.deactivateTouch()
+//}
 
 /// This extesion adds some useful functions to UIWindow
 public extension UIWindow {
@@ -62,54 +62,54 @@ public extension UIWindow {
     
      - returns: Returns the screenshot as an UIImage
      */
-    public func takeScreenshot(save: Bool = false) -> UIImage {
-        let ignoreOrientation: Bool = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO("8.0")
-        
-        let orientation: UIInterfaceOrientation = UIApplication.shared.statusBarOrientation
-        
-        var imageSize: CGSize = CGSize.zero
-        if UIInterfaceOrientationIsPortrait(orientation) || ignoreOrientation {
-            imageSize = UIScreen.main.bounds.size
-        } else {
-            imageSize = CGSize(width: UIScreen.main.bounds.size.height, height: UIScreen.main.bounds.size.width)
-        }
-        
-        UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale)
-        let context: CGContext = UIGraphicsGetCurrentContext()!
-        context.saveGState()
-        context.translateBy(x: self.center.x, y: self.center.y)
-        context.concatenate(self.transform)
-        context.translateBy(x: -self.bounds.size.width * self.layer.anchorPoint.x, y: -self.bounds.size.height * self.layer.anchorPoint.y)
-        
-        if !ignoreOrientation {
-            if orientation == .landscapeLeft {
-                context.rotate(by: CGFloat(M_PI_2))
-                context.translateBy(x: 0, y: -imageSize.width)
-            } else if orientation == .landscapeRight {
-                context.rotate(by: CGFloat(-M_PI_2))
-                context.translateBy(x: -imageSize.height, y: 0)
-            } else if orientation == .portraitUpsideDown {
-                context.rotate(by: CGFloat(M_PI))
-                context.translateBy(x: -imageSize.width, y: -imageSize.height)
-            }
-        }
-        
-        if self.responds(to: #selector(UIView.drawHierarchy(in:afterScreenUpdates:))) {
-            self.drawHierarchy(in: self.bounds, afterScreenUpdates: false)
-        } else {
-            self.layer.render(in: UIGraphicsGetCurrentContext()!)
-        }
-        
-        context.restoreGState()
-        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        if save {
-            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        }
-        
-        return image
-    }
+//    public func takeScreenshot(save: Bool = false) -> UIImage {
+//        let ignoreOrientation: Bool = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO("8.0")
+//        
+//        let orientation: UIInterfaceOrientation = UIApplication.shared.statusBarOrientation
+//        
+//        var imageSize: CGSize = CGSize.zero
+//        if UIInterfaceOrientationIsPortrait(orientation) || ignoreOrientation {
+//            imageSize = UIScreen.main.bounds.size
+//        } else {
+//            imageSize = CGSize(width: UIScreen.main.bounds.size.height, height: UIScreen.main.bounds.size.width)
+//        }
+//        
+//        UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale)
+//        let context: CGContext = UIGraphicsGetCurrentContext()!
+//        context.saveGState()
+//        context.translateBy(x: self.center.x, y: self.center.y)
+//        context.concatenate(self.transform)
+//        context.translateBy(x: -self.bounds.size.width * self.layer.anchorPoint.x, y: -self.bounds.size.height * self.layer.anchorPoint.y)
+//        
+//        if !ignoreOrientation {
+//            if orientation == .landscapeLeft {
+//                context.rotate(by: CGFloat(M_PI_2))
+//                context.translateBy(x: 0, y: -imageSize.width)
+//            } else if orientation == .landscapeRight {
+//                context.rotate(by: CGFloat(-M_PI_2))
+//                context.translateBy(x: -imageSize.height, y: 0)
+//            } else if orientation == .portraitUpsideDown {
+//                context.rotate(by: CGFloat(M_PI))
+//                context.translateBy(x: -imageSize.width, y: -imageSize.height)
+//            }
+//        }
+//        
+//        if self.responds(to: #selector(UIView.drawHierarchy(in:afterScreenUpdates:))) {
+//            self.drawHierarchy(in: self.bounds, afterScreenUpdates: false)
+//        } else {
+//            self.layer.render(in: UIGraphicsGetCurrentContext()!)
+//        }
+//        
+//        context.restoreGState()
+//        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+//        UIGraphicsEndImageContext()
+//        
+//        if save {
+//            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+//        }
+//        
+//        return image
+//    }
     
     /**
      Take a screenshot of current window, choose if save it or not after a delay
@@ -118,41 +118,41 @@ public extension UIWindow {
      - parameter save:       true to save, false to don't save
      - parameter completion: Completion handler with the UIImage
      */
-    public func takeScreenshotWithDelay(_ delay: Double, save: Bool, completion: @escaping (_ screeshot: UIImage) -> ()) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            completion(self.takeScreenshot(save: save))
-        })
-    }
+//    public func takeScreenshotWithDelay(_ delay: Double, save: Bool, completion: @escaping (_ screeshot: UIImage) -> ()) {
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
+//            completion(self.takeScreenshot(save: save))
+//        })
+//    }
     
     /**
      Private, show touch on screen
      */
-    public func activateTouch() {
-        if sendEventExchanged {
-            return
-        }
-        
-        let sendEvent = class_getInstanceMethod(object_getClass(self), #selector(UIApplication.sendEvent(_:)))
-        let exchangedSendEvent = class_getInstanceMethod(object_getClass(self), #selector(UIWindow.exchangedSendEvent(_:)))
-        method_exchangeImplementations(sendEvent, exchangedSendEvent)
-        
-        sendEventExchanged = true
-    }
+//    public func activateTouch() {
+//        if sendEventExchanged {
+//            return
+//        }
+//        
+//        let sendEvent = class_getInstanceMethod(object_getClass(self), #selector(UIApplication.sendEvent(_:)))
+//        let exchangedSendEvent = class_getInstanceMethod(object_getClass(self), #selector(UIWindow.exchangedSendEvent(_:)))
+//        method_exchangeImplementations(sendEvent, exchangedSendEvent)
+//        
+//        sendEventExchanged = true
+//    }
     
     /**
      Private, hide touch on screen
      */
-    public func deactivateTouch() {
-        if !sendEventExchanged {
-            return
-        }
-        
-        let sendEvent = class_getInstanceMethod(object_getClass(self), #selector(UIApplication.sendEvent(_:)))
-        let exchangedSendEvent = class_getInstanceMethod(object_getClass(self), #selector(UIWindow.exchangedSendEvent(_:)))
-        method_exchangeImplementations(exchangedSendEvent, sendEvent)
-        
-        sendEventExchanged = false
-    }
+//    public func deactivateTouch() {
+//        if !sendEventExchanged {
+//            return
+//        }
+//        
+//        let sendEvent = class_getInstanceMethod(object_getClass(self), #selector(UIApplication.sendEvent(_:)))
+//        let exchangedSendEvent = class_getInstanceMethod(object_getClass(self), #selector(UIWindow.exchangedSendEvent(_:)))
+//        method_exchangeImplementations(exchangedSendEvent, sendEvent)
+//        
+//        sendEventExchanged = false
+//    }
     
     /**
      This function is used when touch is visible on screen.

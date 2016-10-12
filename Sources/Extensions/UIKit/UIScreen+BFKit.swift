@@ -107,9 +107,9 @@ public extension UIScreen {
     public func fixedScreenSize() -> CGSize {
         let screenSize = self.bounds.size
         
-        if NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_7_1 && UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
-            return CGSize(width: screenSize.height, height: screenSize.width)
-        }
+//        if NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_7_1 && UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+//            return CGSize(width: screenSize.height, height: screenSize.width)
+//        }
         
         return screenSize
     }
